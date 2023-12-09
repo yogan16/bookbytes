@@ -44,7 +44,7 @@ class MainPage extends StatelessWidget {
         ),
       ),
       drawer: MyDrawer(
-        page: "books",
+        page: "main",
         userdata: userdata,
       ),
     );
