@@ -60,8 +60,8 @@ class _MyDrawerState extends State<MyDrawer> {
             leading: const Icon(Icons.people),
             title: const Text('Community'),
             onTap: () {
-              Navigator.pop(context);
-            },
+                  Navigator.pop(context);
+                },
           ),
           const Divider(
             color: Colors.blueGrey,
