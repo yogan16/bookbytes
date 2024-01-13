@@ -336,19 +336,19 @@ class _CartPageState extends State<CartPage> {
   }
   
   double recalculateTotal() {
-  double newTotal = 0.0;
+    double newTotal = 0.0;
 
-  _groupedCartItems.forEach((sellerCart) {
-    double sellerSubtotal = 0.0;
+    _groupedCartItems.forEach((sellerCart) {
+      double sellerSubtotal = 0.0;
 
-    sellerCart.forEach((item) {
-      sellerSubtotal += double.parse(item.bookPrice!) * int.parse(item.cartQty!);
+      sellerCart.forEach((item) {
+        sellerSubtotal += double.parse(item.bookPrice!) * int.parse(item.cartQty!);
+      });
+      newTotal += sellerSubtotal + 10.0;
     });
-    newTotal += sellerSubtotal + 10.0;
-  });
 
-  return newTotal;
-}
+    return newTotal;
+  }
  int calculateTotalItems() {
     int totalItems = 0;
     _groupedCartItems.forEach((sellerCart) {
