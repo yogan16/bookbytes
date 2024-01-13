@@ -184,8 +184,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void loadBooks(String title) {
-    http
-        .get(
+    http.get(
       Uri.parse(
           "${MyServerConfig.server}/bookbytes/php/load_books.php?title=$title&pageno=$curpage"),
     )

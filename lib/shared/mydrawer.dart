@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_print
 
+import 'package:bookbytes/views/cartpage.dart';
 import 'package:bookbytes/views/loginpage.dart';
 import 'package:bookbytes/views/registrationpage.dart';
 import 'package:flutter/material.dart';
 import '../models/user.dart';
+
 
 class MyDrawer extends StatefulWidget {
   final String page;
@@ -57,10 +59,15 @@ class _MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.people),
-            title: const Text('Community'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('My Cart'),
             onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartPage(user:widget.userdata),
+                    ),
+                  );
                 },
           ),
           const Divider(
