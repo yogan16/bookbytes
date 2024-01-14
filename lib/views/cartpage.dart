@@ -54,41 +54,28 @@ class _CartPageState extends State<CartPage> {
                             ),
                           ),
                           ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: sellerCart.length,
-                            itemBuilder: (context, index) {
-                              final cartItem = sellerCart[index];
-                              return Dismissible(
-                                key: Key(cartItem.bookId.toString()),
-                                background: Container(
-                                  color: Colors.red,
-                                  child: const Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Icon(Icons.delete),
-                                    ],
-                                  ),
-                                ),
-                                onDismissed: (direction) => _deleteCartItem(cartItem),
-                                child: ListTile(
-                                  title: Text(cartItem.bookTitle.toString()),
-                                  subtitle: Text("RM ${cartItem.bookPrice.toString()}"),
-                                  leading: const Icon(Icons.sell),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () => _decrementQuantity(cartItem),
-                                        icon: const Icon(Icons.remove),
-                                      ),
-                                      Text(cartItem.cartQty.toString()),
-                                      IconButton(
-                                        onPressed: () => _incrementQuantity(cartItem),
-                                        icon: const Icon(Icons.add),
-                                      ),
-                                    ],
-                                  ),
+                            shrinkWrap: true, // Add this line to prevent inner ListView from taking infinite height
+                            itemCount: sellerCart.length, // Use the length of sellerCart
+                            itemBuilder: (context, cartIndex) {
+                              final cartItem = sellerCart[cartIndex];
+
+                              return ListTile(
+                                title: Text(cartItem.bookTitle.toString()),
+                                subtitle: Text("RM ${cartItem.bookPrice.toString()}"),
+                                leading: const Icon(Icons.sell),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () => _decrementQuantity(cartItem),
+                                      icon: const Icon(Icons.remove),
+                                    ),
+                                    Text(cartItem.cartQty.toString()),
+                                    IconButton(
+                                      onPressed: () => _incrementQuantity(cartItem),
+                                      icon: const Icon(Icons.add),
+                                    ),
+                                  ],
                                 ),
                               );
                             },
@@ -99,6 +86,7 @@ class _CartPageState extends State<CartPage> {
                     },
                   ),
                 ),
+
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -345,6 +333,7 @@ class _CartPageState extends State<CartPage> {
         sellerSubtotal += double.parse(item.bookPrice!) * int.parse(item.cartQty!);
       });
       newTotal += sellerSubtotal + 10.0;
+
     });
 
     return newTotal;
