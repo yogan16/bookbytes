@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Receipt</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        #receipt-container {
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        #successIcon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        #totalAmount,
+        #referenceNumber,
+        #currentDate,
+        #paymentStatus,
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #6c757d;
+        }
+
+        #receipt-container.success {
+            background-color: #d4edda; 
+        }
+
+        #receipt-container.fail {
+            background-color: #f8d7da; 
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="receipt-container" class="success">
+	<i id="successIcon" class="fas fa-check-circle"></i>
+        <h1>Payment Receipt</h1>
+        <p id="totalAmount"></p>
+        <p id="referenceNumber">Reference Number: <span id="refNumber"></span></p>
+        <p id="currentDate">Date: <span id="date"></span></p>
+        <p id="paymentStatus" style="font-weight: bold; font-size: 30px;">Payment Status: <span id="status"></span></p>
+
+        <script>
+            function generateRandomReferenceNumber() {
+                return Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+            }
+
+            function getCurrentDate() {
+                const now = new Date();
+                const day = now.getDate().toString().padStart(2, '0');
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                const year = now.getFullYear();
+                return `${day}/${month}/${year}`;
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const totalAmount = urlParams.get('amount');
+	    const userId = urlParams.get('userid');
+            const refNumber = urlParams.get('refNumber') || generateRandomReferenceNumber();
+            const currentDate = urlParams.get('date') || getCurrentDate();
+            const paymentStatus = urlParams.get('status');
+
+            document.getElementById('totalAmount').innerText = `Payment ${paymentStatus === 'SUCCESS' ? 'Successful' : 'Failed'} for RM${totalAmount || '0.00'}`;
+            document.getElementById('refNumber').innerText = refNumber;
+            document.getElementById('date').innerText = currentDate;
+            document.getElementById('status').innerText = paymentStatus || '';
+
+            const receiptContainer = document.getElementById('receipt-container');
+            if (paymentStatus === 'FAILURE') {
+                receiptContainer.classList.remove('success');
+                receiptContainer.classList.add('fail');
+            }
+	
+	    function sendDataToDatabase() {
+        	const urlParams = new URLSearchParams(window.location.search);
+        	const totalAmount = urlParams.get('amount');
+        	const refNumber = urlParams.get('refNumber') || generateRandomReferenceNumber();
+        	const currentDate = urlParams.get('date') || getCurrentDate();
+        	const paymentStatus = urlParams.get('status');
+        	const userId = urlParams.get('userid'); // assuming you have user ID in your URL parameters
+
+        	// AJAX request
+        	const xhr = new XMLHttpRequest();
+        	xhr.open('GET', `insert_receipt.php?amount=${totalAmount}&refNumber=${refNumber}&date=${currentDate}&status=${paymentStatus}&userid=${userId}`, true);
+        	xhr.onreadystatechange = function () {
+            	if (xhr.readyState == 4 && xhr.status == 200) {
+                	const response = JSON.parse(xhr.responseText);
+                	console.log(response);
+            	}
+        	};
+        	xhr.send();
+    	}
+        sendDataToDatabase();	
+        </script>
+    </div>
+</body>
+</html>

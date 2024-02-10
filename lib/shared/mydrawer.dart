@@ -5,6 +5,7 @@ import 'package:bookbytes/views/loginpage.dart';
 import 'package:bookbytes/views/registrationpage.dart';
 import 'package:flutter/material.dart';
 import '../models/user.dart';
+import '../views/profilepage.dart';
 
 
 class MyDrawer extends StatefulWidget {
@@ -30,7 +31,7 @@ class _MyDrawerState extends State<MyDrawer> {
               color: Colors.blue,
             ),
             currentAccountPicture: const CircleAvatar(
-              foregroundImage: AssetImage('assets/images/profile.png'),
+              foregroundImage: AssetImage('assets/images/1.jpg'),
               backgroundColor: Colors.white,
             ),
             accountName: Text(widget.userdata.username.toString()),
@@ -105,7 +106,12 @@ class _MyDrawerState extends State<MyDrawer> {
                 leading: const Icon(Icons.manage_accounts),
                 title: const Text('Manage'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePage(user: widget.userdata,),
+                    ),
+                  );
                 },
               ),
             ],

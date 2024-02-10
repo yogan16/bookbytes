@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 13, 2024 at 08:17 PM
+-- Generation Time: Feb 10, 2024 at 09:59 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -45,7 +45,7 @@ CREATE TABLE `tbl_books` (
 --
 
 INSERT INTO `tbl_books` (`book_id`, `user_id`, `book_isbn`, `book_title`, `book_desc`, `book_author`, `book_price`, `book_qty`, `book_status`, `book_date`) VALUES
-(1, '3', '978-6-789012-34-5', 'Whirlwind of Wonders', 'An epic fantasy adventure where a diverse group of heroes embarks on a quest to save their world from an impending cataclysm.', 'Seraphina Stormrider', 200.00, 2, 'New', '2023-12-22 06:36:16.000000'),
+(1, '3', '978-6-789012-34-5', 'Whirlwind of Wonders', 'An epic fantasy adventure where a diverse group of heroes embarks on a quest to save their world from an impending cataclysm.', 'Seraphina Stormrider', 200.00, 10, 'New', '2023-12-22 06:36:16.000000'),
 (2, '6', '978-5-678901-24-5', 'Whispers of the Forgotten', 'Lost secrets stir and forgotten voices whisper in the shadows, beckoning brave souls to uncover the truth in a world shrouded in mystery.', 'Echoes of the Past', 500.00, 0, 'New', '2023-12-22 06:52:06.000000'),
 (3, '3', '978-5-678901-25-6', 'Chronicles of the Celestial Kingdom', 'Generations of celestial guardians have protected the heavens, but with a dark power rising, a young heir must claim their destiny and rewrite the chronicles of the stars.', 'Starlight Scribe', 250.00, 1, 'New', '2023-12-22 06:52:06.000000'),
 (4, '2', '978-5-678901-26-7', 'Ephemeral Echoes', 'Memories shimmer like fireflies in the twilight, fleeting yet powerful, as a young mage seeks to unravel the secrets of a lost civilization before they fade into oblivion.', 'Whispers of Time', 250.00, 2, 'Used', '2023-12-22 06:59:26.000000'),
@@ -77,7 +77,6 @@ CREATE TABLE `tbl_carts` (
   `book_id` varchar(5) NOT NULL,
   `cart_qty` int(5) NOT NULL,
   `cart_status` varchar(10) NOT NULL,
-  `order_id` varchar(5) NOT NULL,
   `cart_date` datetime(6) NOT NULL DEFAULT current_timestamp(6)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -85,8 +84,49 @@ CREATE TABLE `tbl_carts` (
 -- Dumping data for table `tbl_carts`
 --
 
-INSERT INTO `tbl_carts` (`cart_id`, `buyer_id`, `seller_id`, `book_id`, `cart_qty`, `cart_status`, `order_id`, `cart_date`) VALUES
-(40, '12', '3', '1', 3, 'New', '', '2024-01-14 03:15:52.418563');
+INSERT INTO `tbl_carts` (`cart_id`, `buyer_id`, `seller_id`, `book_id`, `cart_qty`, `cart_status`, `cart_date`) VALUES
+(67, '12', '3', '1', 2, 'Delivered', '2024-02-02 03:02:50.053895'),
+(68, '12', '3', '1', 1, 'Delivered', '2024-02-02 03:10:48.504041'),
+(69, '12', '3', '1', 1, 'Delivered', '2024-02-02 03:10:52.433437'),
+(70, '12', '3', '1', 2, 'Delivered', '2024-02-09 02:32:49.789948'),
+(71, '12', '3', '1', 1, 'Delivered', '2024-02-10 06:38:34.056513'),
+(72, '12', '3', '1', 1, 'Delivered', '2024-02-10 13:59:59.674943'),
+(73, '12', '3', '1', 2, 'Delivered', '2024-02-10 14:38:57.946330'),
+(74, '12', '2', '4', 1, 'Delivered', '2024-02-10 14:58:08.941422'),
+(75, '12', '3', '1', 1, 'Delivered', '2024-02-10 14:58:16.648347'),
+(76, '12', '3', '1', 1, 'Delivered', '2024-02-10 15:18:52.741578'),
+(77, '12', '2', '4', 1, 'Delivered', '2024-02-10 15:18:59.118034'),
+(78, '12', '3', '1', 1, 'Delivered', '2024-02-10 15:20:43.110753'),
+(79, '12', '3', '6', 1, 'Delivered', '2024-02-10 16:18:07.123945');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_orders`
+--
+
+CREATE TABLE `tbl_orders` (
+  `order_id` int(5) NOT NULL,
+  `buyer_id` varchar(5) NOT NULL,
+  `refNum` int(15) NOT NULL,
+  `order_total` decimal(5,2) NOT NULL,
+  `order_date` varchar(15) NOT NULL,
+  `order_status` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_orders`
+--
+
+INSERT INTO `tbl_orders` (`order_id`, `buyer_id`, `refNum`, `order_total`, `order_date`, `order_status`) VALUES
+(23, '12', 158975, 410.00, '01/02/2024', 'SUCCESS'),
+(24, '12', 103518, 410.00, '01/02/2024', 'SUCCESS'),
+(25, '12', 654057, 410.00, '09/02/2024', 'SUCCESS'),
+(26, '12', 514703, 210.00, '09/02/2024', 'SUCCESS'),
+(27, '12', 316771, 210.00, '10/02/2024', 'SUCCESS'),
+(28, '12', 972877, 470.00, '10/02/2024', 'SUCCESS'),
+(29, '12', 545045, 210.00, '10/02/2024', 'FAILURE'),
+(30, '12', 882910, 260.00, '10/02/2024', 'SUCCESS');
 
 -- --------------------------------------------------------
 
@@ -98,6 +138,7 @@ CREATE TABLE `tbl_users` (
   `user_id` int(11) NOT NULL,
   `user_email` varchar(50) NOT NULL,
   `user_name` varchar(100) NOT NULL,
+  `user_phone` varchar(12) NOT NULL,
   `user_password` varchar(40) NOT NULL,
   `user_datereg` datetime(6) NOT NULL DEFAULT current_timestamp(6)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -106,9 +147,10 @@ CREATE TABLE `tbl_users` (
 -- Dumping data for table `tbl_users`
 --
 
-INSERT INTO `tbl_users` (`user_id`, `user_email`, `user_name`, `user_password`, `user_datereg`) VALUES
-(12, 'yoganraj70@gmail.com', 'Yoganraj', '64d6ac23a01ff61fd75b8aaf4e63152379340dfd', '2023-12-10 03:20:20.175724'),
-(13, 'Testing@gmail.com', 'Test', '99c884b90f6d2c6086075661a84f11798d0bddf6', '2023-12-10 04:18:48.086122');
+INSERT INTO `tbl_users` (`user_id`, `user_email`, `user_name`, `user_phone`, `user_password`, `user_datereg`) VALUES
+(12, 'yoganraj70@gmail.com', 'Yogan', '0134568578', 'a94006eef3e9e6ff80eb2a20de0b2ff728b57622', '2023-12-10 03:20:20.175724'),
+(13, 'Testing@gmail.com', 'Test', '0148569585', '99c884b90f6d2c6086075661a84f11798d0bddf6', '2023-12-10 04:18:48.086122'),
+(14, 'Ravi@gmail.com', 'Ravi', '0124785869', '5e0535956c5284c59aec80489d64380a1b30eb40', '2024-02-10 02:47:59.087223');
 
 --
 -- Indexes for dumped tables
@@ -126,6 +168,12 @@ ALTER TABLE `tbl_books`
 --
 ALTER TABLE `tbl_carts`
   ADD PRIMARY KEY (`cart_id`);
+
+--
+-- Indexes for table `tbl_orders`
+--
+ALTER TABLE `tbl_orders`
+  ADD PRIMARY KEY (`order_id`);
 
 --
 -- Indexes for table `tbl_users`
@@ -148,13 +196,19 @@ ALTER TABLE `tbl_books`
 -- AUTO_INCREMENT for table `tbl_carts`
 --
 ALTER TABLE `tbl_carts`
-  MODIFY `cart_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `cart_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+
+--
+-- AUTO_INCREMENT for table `tbl_orders`
+--
+ALTER TABLE `tbl_orders`
+  MODIFY `order_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

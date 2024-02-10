@@ -1,6 +1,5 @@
 <?php
-//error_reporting(0);  // Consider removing this line in a production environment to enable error reporting
-
+//error_reporting(0); 
 include_once("dbconnect.php");
 
 // Check for required POST parameter
@@ -26,9 +25,8 @@ if ($stmt->execute()) {
     sendJsonResponse($response);
 }
 
-$stmt->close();  // Close the prepared statement
-$conn->close();  // Close the database connection
-
+$stmt->close(); 
+$conn->close(); 
 function sendJsonResponse($sentArray) {
     header('Content-Type: application/json');
     echo json_encode($sentArray);

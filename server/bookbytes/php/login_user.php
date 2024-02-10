@@ -19,6 +19,7 @@ if ($result->num_rows > 0) {
         $userlist['userid'] = $row['user_id'];
         $userlist['useremail'] = $row['user_email'];
         $userlist['username'] = $row['user_name'];
+	$userlist['userphone'] = $row['user_phone'];
         $userlist['userpassword'] = $_POST['password'];
         $userlist['userdatereg'] = $row['user_datereg'];
     }

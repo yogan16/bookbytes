@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:bookbytes/models/cart.dart';
 import 'package:bookbytes/models/user.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../shared/myserverconfig.dart';
+import 'billscreen.dart';
 
 class CartPage extends StatefulWidget {
   final User user;
@@ -54,8 +57,8 @@ class _CartPageState extends State<CartPage> {
                             ),
                           ),
                           ListView.builder(
-                            shrinkWrap: true, // Add this line to prevent inner ListView from taking infinite height
-                            itemCount: sellerCart.length, // Use the length of sellerCart
+                            shrinkWrap: true, 
+                            itemCount: sellerCart.length, 
                             itemBuilder: (context, cartIndex) {
                               final cartItem = sellerCart[cartIndex];
 
@@ -181,10 +184,29 @@ class _CartPageState extends State<CartPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                   
+                              List<Cart> cartCopy = List.from(cartList);
+
+                              await Future.forEach(cartCopy, (Cart cartItem) async {
+                                await _updateCartItem(cartItem);
+                              });
+
+                              // Navigate to BillScreen
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (content) => BillScreen(
+                                    user: widget.user,
+                                    totalprice: total,
+                                  ),
+                                ),
+                              );
                             },
                             child: Text("CHECKOUT"),
                           ),
+
+
                         ],
                       ),
                     ],
@@ -282,7 +304,32 @@ class _CartPageState extends State<CartPage> {
       print("Error updating cart quantity: $error");
     }
   }
-  
+  _updateCartItem(Cart cartItem) {
+    try {
+      // Update status to Delivered for the specific item
+      http.post(
+        Uri.parse("${MyServerConfig.server}/bookbytes/php/update_cart_status.php"),
+        body: {
+          "cart_id": cartItem.cartId,
+          "status": "Delivered",
+        },
+      );
+
+      // Clear the entire cart locally
+      setState(() {
+        cartList.clear();
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Cart cleared"), backgroundColor: Colors.green,),
+      );
+    } catch (error) {
+      print("Error Cart: $error");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("An error occurred"), backgroundColor: Colors.red,),
+      );
+    }
+  }
 
   _deleteCartItem(Cart cartItem) async {
     try {
